@@ -173,9 +173,41 @@ export class PartPipeline {
 
         this.setupConfiguresList(window);
 
-        this._settings.connect("changed", (settings, key) => {
+        this._settingsChanged = this._settings.connect("changed", (settings, key) => {
             this.onSettingsChanged(settings, key, window);
         });
+    }
+
+    destroy() {
+        if (this._settingsChanged) {
+            this._settings.disconnect(this._settingsChanged);
+        }
+
+        if (this.page) {
+            if (this._configureGroup) {
+                if (this._configureRows) {
+                    for (let row of this._configureRows) {
+                        this._configureGroup.remove(row);
+                    }
+                }
+
+                if (this._buttonsGroup) {
+                    this._configureGroup.remove(this._buttonsGroup);
+                }
+
+                this.page.remove (this._configureGroup);
+            }
+
+            this.page.insert_action_group("configures", null);
+        }
+
+        this._settingsChanged = null;
+        this._settings = null;
+        this._configureRows = null;
+        this._buttonsGroup = null;
+        this._configureGroup = null;
+        this._dialogAlertReset = null;
+        this.page = null;
     }
 
     /**

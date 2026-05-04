@@ -30,9 +30,6 @@ export default class ScreencastExtraFeaturePreferences extends ExtensionPreferen
      * @param {Adw.PreferencesWindow} window A window.
      */
     fillPreferencesWindow(window) {
-        /**
-         * @type {Gio.Settings}
-         */
         this._settings = this.getSettings("org.gnome.shell.extensions.screencastExtraFeature");
         
         // Register icon before creating preference parts.
@@ -44,5 +41,18 @@ export default class ScreencastExtraFeaturePreferences extends ExtensionPreferen
         this._partPipeline = new PartPipeline.PartPipeline(window, this.path, this._settings);
         
         window.add(this._partPipeline.page);
+        window.connect("close-request", this.onWindowClose.bind(this));
+    }
+
+    /**
+     * @param window {Gtk.Window} A preference window.
+     */
+    onWindowClose(window) {
+        if (this._partPipeline) {
+            this._partPipeline.destroy();
+        }
+
+        this._partPipeline = null;
+        this._settings = null;
     }
 }
