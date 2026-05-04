@@ -196,7 +196,7 @@ export default class ScreencastExtraFeature extends Extension {
             console.warn(`Setup pipeline configure failed: ${e}`);
         });
 
-        this._settings.connect("changed::pipeline-configures", () => {
+        this._settingsChangedPipelineConfigures = this._settings.connect("changed::pipeline-configures", () => {
             this._pipelineConfigures = null;
             this._pipelineConfigureIndex = 0;
 
@@ -253,10 +253,13 @@ export default class ScreencastExtraFeature extends Extension {
             this._partPref = null;
         }
 
-        this._screen
         this._screenshotUI = null;
 
         // Internal variables
+        if (this._settings && this._settingsChangedPipelineConfigures) {
+            this._settings.disconnect(this._settingsChangedPipelineConfigures);
+        }
+
         this._pipelineConfigures = null;
 
         this._settings = null;
