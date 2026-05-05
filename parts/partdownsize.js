@@ -18,12 +18,14 @@
 
 import * as PartBase from "./partbase.js";
 
+import {gettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+
 const DOWNSIZE_RATIO = [1.00, 0.75, 0.50, 0.33];
 
-/** @extends {PartBase.PartPopupSelect<number>} */
-export class PartDownsize extends PartBase.PartPopupSelect {
-    constructor(screenshotUI) {
-        super(screenshotUI, DOWNSIZE_RATIO, 1.00);
+/** @extends {PartBase.PartOptionSelect<number>} */
+export class PartDownsize extends PartBase.PartOptionSelect {
+    constructor(optionMenu) {
+        super(optionMenu, gettext("Downsize"), DOWNSIZE_RATIO, 1.00);
     }
     
     /** @override */

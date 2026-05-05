@@ -21,11 +21,15 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gst from 'gi://Gst';
+import St from "gi://St";
 
 // Shell imports
 
-import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {gettext, Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as Screenshot from 'resource:///org/gnome/shell/ui/screenshot.js';
+
 
 import * as PartAudio from "./parts/partaudio.js"
 import * as PartFramerate from "./parts/partframerate.js"
@@ -169,15 +173,64 @@ export default class ScreencastExtraFeature extends Extension {
 
         // Reference from Main UI
         this._screenshotUI = Main.screenshotUI;
+        this._showPointerButtonContainer = Main.screenshotUI._showPointerButtonContainer;
+        this._shotButton = Main.screenshotUI._shotButton;
+
         this._screenRecordingIndicator = Main.panel.statusArea.screenRecording;
 
+        // Additional UI - Adjust Button
+        this._optionButton = new St.Button({
+            style_class: 'screenshot-ui-show-pointer-button',
+            visible: false
+        });
+        this._optionButtonIcon = new St.Icon({
+            gicon: new Gio.FileIcon({
+                file: this.dir.get_child("icons").get_child("controls-symbolic.svg")
+            })
+        });
+        this._optionButtonPopupMenu = new PopupMenu.PopupMenu(
+            this._optionButton,
+            0.5,
+            St.Side.BOTTOM
+        );
+        this._optionButtonPopupMenu.actor.visible = false;
+
+        this._optionButtonTooltip = new Screenshot.Tooltip(
+            this._optionButton,
+            {
+                style_class: 'screenshot-ui-tooltip',
+                text: gettext("Additional Video Options"),
+                visible: false
+            }
+        );
+
+        this._optionButton.add_child(this._optionButtonIcon);
+        this._showPointerButtonContainer.insert_child_at_index(this._optionButton, 0);
+        this._screenshotUI.add_child(this._optionButtonTooltip);
+        this._screenshotUI.add_child(this._optionButtonPopupMenu.actor);
+        this._optionButtonClicked = this._optionButton.connect(
+            "clicked",
+            (_object, _button) => this._optionButtonPopupMenu.toggle()
+        );
+
         // Extension parts.
-        this._partPref = new PartPref.PartPref(this._screenshotUI, this);
         this._partAudio = new PartAudio.PartAudio(this._screenshotUI, this.dir);
-        this._partFramerate = new PartFramerate.PartFramerate(this._screenshotUI);
-        this._partDownsize = new PartDownsize.PartDownsize(this._screenshotUI);
+        this._partFramerate = new PartFramerate.PartFramerate(this._optionButtonPopupMenu);
+        this._partDownsize = new PartDownsize.PartDownsize(this._optionButtonPopupMenu);
         this._partQuickStop = new PartQuickStop.PartQuickStop(this._screenshotUI);
         this._partIndicator = new PartIndicator.PartIndicator(this._screenshotUI, this._screenRecordingIndicator);
+        this._partPref = new PartPref.PartPref(this._screenshotUI, this._optionButtonPopupMenu, this);
+
+
+        // Shot / Cast Mode
+        this._shotButtonNotifyChecked = this._shotButton.connect(
+            "notify::checked",
+            (_object, _pspec) => {
+                let castModeSelected = !this._shotButton.checked;
+                this._optionButton.visible = castModeSelected;
+                this._partAudio.onCastModeSelected(castModeSelected);
+            }
+        );
 
         // Monkey patch
         this._screencastProxy = this._screenshotUI._screencastProxy;
@@ -219,6 +272,11 @@ export default class ScreencastExtraFeature extends Extension {
         }
 
         // Destroy parts.
+        if (this._partPref) {
+            this._partPref.destroy();
+            this._partPref = null;
+        }
+
         if (this._partIndicator) {
             this._partIndicator.destroy();
             this._partIndicator = null;
@@ -243,13 +301,51 @@ export default class ScreencastExtraFeature extends Extension {
             this._partQuickStop.destroy();
             this._partQuickStop = null;
         }
-        
-        if (this._partPref) {
-            this._partPref.destroy();
-            this._partPref = null;
+
+        if (this._shotButton) {
+            if (this._shotButtonNotifyChecked) {
+                this._shotButton.disconnect(this._shotButtonNotifyChecked);
+                this._shotButtonNotifyChecked = null;
+            }
+            this._shotButton = null;
         }
 
-        this._screenshotUI = null;
+        if (this._screenshotUI) {
+            if (this._optionButtonTooltip) {
+                this._screenshotUI.remove_child(this._optionButtonTooltip);
+                this._optionButtonTooltip.destroy();
+                this._optionButtonTooltip = null;
+            }
+            if (this._optionButtonPopupMenu) {
+                this._screenshotUI.remove_child(this._optionButtonPopupMenu.actor);
+                this._optionButtonPopupMenu.destroy();
+                this._optionButtonPopupMenu = null;
+            }
+            this._screenshotUI = null;
+        }
+
+        if (this._showPointerButtonContainer) {
+            if (this._optionButton) {
+                if (this._optionButtonIcon) {
+                    this._optionButton.remove_child(this._optionButtonIcon);
+                    this._optionButtonIcon.destroy();
+                    this._optionButtonIcon = null;
+                }
+
+                if (this._optionButtonClicked) {
+                    this._optionButton.disconnect(this._optionButtonClicked);
+                    this._optionButtonClicked = null;
+                }
+
+                this._showPointerButtonContainer.remove_child(this._optionButton);
+                this._optionButton.destroy();
+                this._optionButton = null;
+            }
+
+            this._showPointerButtonContainer = null;
+        }
+
+        this._screenRecordingIndicator = null;
 
         // Internal variables
         if (this._settings && this._settingsChangedPipelineConfigures) {

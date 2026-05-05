@@ -17,14 +17,16 @@
  */
 import * as PartBase from "./partbase.js"
 
+import {gettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+
 
 const FRAMERATES = [15, 24, 30, 60];
 
 
-/** @extends {PartBase.PartPopupSelect<number>} */
-export class PartFramerate extends PartBase.PartPopupSelect {
-    constructor (screenshotUI) {
-        super(screenshotUI, FRAMERATES, 30);
+/** @extends {PartBase.PartOptionSelect<number>} */
+export class PartFramerate extends PartBase.PartOptionSelect {
+    constructor (optionMenu) {
+        super(optionMenu, gettext("Framerate"), FRAMERATES, 30);
     }
 
     /** @override */
