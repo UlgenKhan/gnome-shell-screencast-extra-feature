@@ -24,32 +24,33 @@ gnome-extensions install screencast.extra.feature@wissle.me-shell-extension.zip
 
 ### Main UI
 
-UI of Built-in Screencast feature has top part and bottom part. This extension
-adds additonal UI on these.
+This extension adds additonal UI on built-in screenshot UI.
 
-![Screen Shot Main UI](docs/screenshot_03.png)
+![Screen Shot Main UI](docs/screenshot_04.png)
 
-1.  Top Part
+1.  Audio Selectors.
 
     Two additional selectors for sound record. Each can be turned on or off
-    individually.
+    individually, allows both can be included in screen cast.
 
     - Desktop: Record Desktop Sound, which is what you listen from speaker,
       like games, videos.
 
     - Mic: Record Mic Sound, which is what you say to microphone.
        
-2.  Bottom Part
+2.  Screen Cast Options.
 
-    Additional option for screen cast.
+    A menu button for additional options on screen cast, is added.
 
-    - 100%: Downsize screen cast resolution. (Lesser pixels for video) Supported
-      to 33%.
+    ![Screen Shot Options UI](docs/screenshot_05.png)
 
-    - FPS: Framerate for screen cast. (How many pictures per seconds) Supported
-      up to 60 Hz.
+    - Framerate: Framerate for screen cast. (How many pictures per seconds)
+      Supported up to 60 Hz.
 
-    - Preferences: Open Preferences window.
+    - Downsize: Downsize screen cast resolution. (Lesser pixels for video)
+      Supported to 33%. 
+
+    - Screencast extra feature preferences: Open Preferences window.
 
 ### Preferences
 
