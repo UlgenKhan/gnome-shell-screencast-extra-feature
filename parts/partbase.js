@@ -33,72 +33,62 @@ export class PartBase {
 }
 
 /**
- * A base class for popup selection.
- *
- * @template T Type of selectable item.
+ * A base class for part, that adds UI on here.
  */
-export class PartOptionSelect extends PartBase {
+export class PartUI extends PartBase {
+
     /**
-     * Construct part with screenshot UI and items.
+     * Construct part with screenshot UI.
      *
-     * @param {PopupMenu.PopupMenuBase} optionMenu option menu to attach this menu.
-     * @param {string} title Title of the item.
-     * @param {T[]} items a list of selectable items.
-     * @param {T} selectedItem Initially selected item.
+     * @param screenshotUI a screenshot UI.
      */
-    constructor(optionMenu, title, items, selectedItem) {
+    constructor(screenshotUI) {
         super();
-        this._optionMenu = optionMenu;
-        this._selectedItem = selectedItem;
 
-        let label = `${title}: ${this.makeLabel(this._selectedItem)}`;
-        this._submenuMenuItem = new PopupMenu.PopupSubMenuMenuItem(label, true);
+        this._castModeSelected = false;
 
-        this._optionMenu.addMenuItem(this._submenuMenuItem);
+        this.screenshotUI = screenshotUI;
+        this.shotButton = this.screenshotUI._shotButton;
 
-        for (let item of items) {
-            let label = this.makeLabel(item);
-            let titleLabel = `${title}: ${label}`;
-            this._submenuMenuItem.menu.addAction (
-                label,
-                () => {
-                    this._selectedItem = item;
-                    this._submenuMenuItem.label.text = titleLabel;
-                }
-            )
-        }
+        this.shotButtonNotifyChecked = this.shotButton.connect (
+            "notify::checked",
+            (_object, _pspec) => {
+                this._castModeSelected = !this.shotButton.checked;
+                this.onCastModeSelected(this._castModeSelected);
+            }
+        );
     }
 
     /** @override */
     destroy() {
-        if (this._submenuMenuItem) {
-            this._submenuMenuItem.destroy();
-            this._submenuMenuItem = null;
+        if (this.shotButton && this.shotButtonNotifyChecked) {
+            this.shotButton.disconnect(this.shotButtonNotifyChecked);
         }
 
-        this._submenuMenuItem = null;
-        this._selectedItem = null;
+        this.shotButton = null;
+        this.screenshotUI = null;
+
+        this._castModeSelected = false;
 
         super.destroy();
     }
 
     /**
-     * Make label from the item.
+     * Called when the cast mode selection is changed.
      *
-     * @abstract
-     * @param {T} item Item to label.
-     * @returns {string} The label for the item.
+     * @param {boolean} selected Whether the cast mode is selected.
      */
-    makeLabel(item) {
-        throw new Error("Not Implemented");
+    onCastModeSelected(selected) {
+        // Empty.
     }
 
     /**
-     * Get selected item.
+     * Get cast mode selected.
      *
-     * @returns {T} selected item.
+     * @returns {boolean} Whether the cast mode is selected.
      */
-    get selectedItem () {
-        return this._selectedItem;
+    get castModeSelected() {
+        return this._castModeSelected;
     }
 }
+

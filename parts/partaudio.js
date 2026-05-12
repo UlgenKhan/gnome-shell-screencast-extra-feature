@@ -98,11 +98,9 @@ class IconLabelButton extends St.Button {
  * - Provide UI to activate desktop audio and mic audio.
  * - Provide pipeline description for activated audio sources.
  */
-export class PartAudio extends PartBase.PartBase {
+export class PartAudio extends PartBase.PartUI {
     constructor(screenshotUI, dir) {
-        super();
-        this.castModeSelected = false;
-        this.screenshotUI = screenshotUI;
+        super(screenshotUI);
         this.typeButtonContainer = this.screenshotUI._typeButtonContainer;
         
         let iconsDir = dir.get_child("icons");
@@ -230,14 +228,8 @@ export class PartAudio extends PartBase.PartBase {
         super.destroy();
     }
 
-    /**
-     * Called when the cast mode selection is changed.
-     *
-     * @param {boolean} selected Whether the cast mode is selected.
-     */
+    /** @override */
     onCastModeSelected(selected) {
-        this.castModeSelected = selected;
-        
         this._updateDesktopAudioButton();
         this._updateMicAudioButton();
     }
