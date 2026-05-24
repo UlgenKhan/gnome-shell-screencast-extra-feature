@@ -69,90 +69,6 @@ function fixFilePath(filepath, extension) {
     return newFilepath;
 }
 
-/**
- * Check that element exists.
- *
- * NOTE: This just checks existence of elements. Element's availability is
- * not known. (like missing GPU or something...)
- *
- * NOTE: This launches extenral process `gst-inspect-1.0 --exists ${element}`
- *   The extension used to use GStreamer, but sometimes Gst.init(...) in
- *   extension would freeze up whole gnome-shell.
- *
- * @param {string} element Element
- * @returns {Promise<boolean>} Whether the element is available.
- */
-async function checkElement(element) {
-    return new Promise ((resolve) => {
-        let sub = new Gio.Subprocess({
-            argv: ["gst-inspect-1.0", "--exists", element],
-            flags: Gio.SubprocessFlags.NONE
-        });
-        sub.init(null);
-
-        sub.wait_async(null, (src, result) => {
-            src.wait_finish(result);
-            resolve(src.get_exit_status() == 0);
-        });
-    });
-}
-
-
-/**
- * Check that pipeline can be created properly.
- *
- * NOTE: This just checks existence of elements. Element's availability is
- * not known. (like missing GPU or something...)
- *
- * @param {string} pipeline Pipeline
- * @param {Map<string, Promise<boolean>>} availabilityMap Availability Map to cache result.
- * @returns {Promise<boolean>} Whether the pipeline is available.
- */
-async function checkPipeline(pipeline, availabilityMap) {
-    let words = pipeline.split(/\s+/);
-    let elements = words.filter((word) => {
-        return ! (
-            word.includes(".") || // object reference (ex. "mux.")
-            word.includes("=") || // property (ex. "name=value")
-            word.includes("!")    // element separator '!'
-        );
-    });
-
-    let promises = elements.map ((elem) => {
-        if (availabilityMap.has(elem)) {
-            return availabilityMap.get(elem);
-        } else {
-            let availability = checkElement(elem);
-            availabilityMap.set(elem, availability);
-            return availability;
-        }
-    });
-
-    let results = await Promise.all(promises);
-
-    return results.every(res => res);
-}
-
-/**
- * Check that configure can be created properly.
- *
- * @param {Configure} configure Configure.
- * @param {Map<string, Promise<boolean>>} availabilityMap Availability Map to cache result.
- * @returns {Promise<boolean>} Whether the configure is available to use.
- */
-async function checkConfigure(configure, availabilityMap) {
-    let promises = [
-        checkPipeline(configure.videoPrepPipeline, availabilityMap),
-        checkPipeline(configure.videoPipeline, availabilityMap),
-        checkPipeline(configure.audioPipeline, availabilityMap),
-        checkPipeline(configure.muxer, availabilityMap)
-    ];
-
-    let results = await Promise.all(promises);
-
-    return results.every(res => res);
-}
-
 export default class ScreencastExtraFeature extends Extension {
     enable() {
         // Internal variables.
@@ -337,7 +253,7 @@ export default class ScreencastExtraFeature extends Extension {
      * Perform configuration initialization.
      */
     async _setupPipelineConfigure() {
-        let pipelineConfigures = this._settings.get_value("pipeline-configures").recursiveUnpack().map((tuple) => {
+        this._pipelineConfigures = this._settings.get_value("pipeline-configures").recursiveUnpack().map((tuple) => {
             return {
                 "id": tuple[0],
                 "videoPrepPipeline": tuple[1],
@@ -348,18 +264,6 @@ export default class ScreencastExtraFeature extends Extension {
                 "extension": tuple[6]
             };
         });
-
-        try {
-
-            let availabilityMap = new Map();
-            let promises = pipelineConfigures.map((conf) => checkConfigure(conf, availabilityMap));
-            let checkResults = await Promise.all(promises);
-            this._pipelineConfigures = pipelineConfigures.filter((_, index) => checkResults[index]);
-        } catch (e) {
-            console.warn(`Configuration filtering fails: ${e}`);
-            console.warn("Fallback to use all configures.");
-            this._pipelineConfigures = pipelineConfigures;
-        }
         this._pipelineConfigureIndex = 0;
     }
 
