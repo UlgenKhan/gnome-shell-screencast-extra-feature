@@ -235,13 +235,6 @@ export default class ScreencastExtraFeature extends Extension {
                 return [success, filepath];
             } catch (e) {
                 this._pipelineConfigureIndex++;
-
-                var videoPrep = configure.videoPrepPipeline;
-                if (this._partAdjust.downsizeRatio != 1.00) {
-                    videoPrep =
-                        configure.videoPrepDownsizePipeline ||
-                        configure.videoPrepPipeline;
-                }
             }
         }
 
