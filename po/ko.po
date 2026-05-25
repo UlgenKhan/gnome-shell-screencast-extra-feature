@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screencast.extra.feature 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 09:57+0900\n"
+"POT-Creation-Date: 2026-05-25 17:10+0900\n"
 "PO-Revision-Date: 2025-10-26 17:51+0900\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,6 +17,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: parts/partadjust.js:131
+msgid "Additional Video Options"
+msgstr "추가적인 비디오 옵션"
+
+#: parts/partadjust.js:147
+msgid "Framerate"
+msgstr "프레임률"
+
+#: parts/partadjust.js:156
+msgid "Downsize"
+msgstr "크기 감축"
+
+#: parts/partadjust.js:165
+msgid "Screencast extra feature preferences"
+msgstr "Screencast 추가 기능 설정"
+
 #: parts/partaudio.js:113
 msgid "Desktop"
 msgstr "데스크탑"
@@ -25,16 +41,16 @@ msgstr "데스크탑"
 msgid "Mic"
 msgstr "마이크"
 
-#: parts/partaudio.js:315
-#, javascript-format
+#: parts/partaudio.js:314
+#, fuzzy, javascript-format
 msgid ""
 "Record Desktop Audio\n"
-"%s: %s"
+"%s"
 msgstr ""
 "데스크탑 소리 녹음\n"
-"%s: %s"
+"%s"
 
-#: parts/partaudio.js:319
+#: parts/partaudio.js:318
 msgid ""
 "Cannot record Desktop Audio.\n"
 "No audio device."
@@ -42,16 +58,16 @@ msgstr ""
 "데스크탑 소리를 녹음할 수 없어요.\n"
 "소리 장치가 없어요."
 
-#: parts/partaudio.js:339
-#, javascript-format
+#: parts/partaudio.js:337
+#, fuzzy, javascript-format
 msgid ""
 "Record Mic Audio\n"
-"%s: %s"
+"%s"
 msgstr ""
 "마이크 소리 녹음\n"
-"%s: %s"
+"%s"
 
-#: parts/partaudio.js:343
+#: parts/partaudio.js:341
 msgid ""
 "Cannot record Mic Audio.\n"
 "No audio device."
@@ -59,33 +75,31 @@ msgstr ""
 "마이크 소리를 녹음할 수 없어요.\n"
 "소리 장치가 없어요."
 
-#: parts/partpref.js:60
-msgid "Screencast extra feature preferences"
-msgstr "Screencast 추가 기능 설정"
-
-#: prefsParts/partpipeline.js:181
+#: prefsParts/partpipeline.js:226
 msgid "Copy"
 msgstr "복사"
 
-#: prefsParts/partpipeline.js:182
+#: prefsParts/partpipeline.js:227
 msgid "Remove"
 msgstr "제거"
 
-#: prefsParts/partpipeline.js:185
+#: prefsParts/partpipeline.js:230
 msgid "Move Up"
 msgstr "위로 이동"
 
-#: prefsParts/partpipeline.js:188
+#: prefsParts/partpipeline.js:233
 msgid "Move Down"
 msgstr "아래로 이동"
 
-#: schemas/screencast.extra.feature@wissle.me.gschema.xml:83
+#: schemas/org.gnome.shell.extensions.screencastExtraFeature.gschema.xml:83
 msgid ""
 "Pipeline configures to use. Configures are tried in order. [ (name, video "
 "preparation, video preparation resizing, video encoding, audio encoding, "
 "muxer, file extension), ... ]"
 msgstr ""
-"사용할 파이프라인을 설정합니다. 설정들은 순서대로 시도됩니다. [ (이름, 비디오 준비, 크기 조정 비디오 준비, 비디오 부호화, 오디오 부호화, 먹서, 파일 확장자) ]"
+"사용할 파이프라인을 설정합니다. 설정들은 순서대로 시도됩니다. [ (이름, 비디"
+"오 준비, 크기 조정 비디오 준비, 비디오 부호화, 오디오 부호화, 먹서, 파일 확장"
+"자) ]"
 
 #: data/ui/preferencePipeline.ui:7
 msgid "Pipeline"
@@ -103,54 +117,56 @@ msgstr ""
 "스크린캐스트가 어떻게 인코딩 될지 결정합니다. 인코딩 옵션을 포함합니다.\n"
 "순서대로 시도됩니다."
 
-#: data/ui/preferencePipeline.ui:24
-msgid "Add Pipeline Configure"
-msgstr "파이프라인 설정 추가"
-
-#: data/ui/preferencePipeline.ui:32
-msgid "Reset Pipeline Configures to Default"
-msgstr "기본값으로 파이프라인 설정을 초기화"
-
-#: data/ui/preferencePipeline.ui:46
+#: data/ui/preferencePipeline.ui:20
 msgid "Reset to default?"
 msgstr "기본값으로 초기화 합니까?"
 
-#: data/ui/preferencePipeline.ui:47
+#: data/ui/preferencePipeline.ui:21
 msgid ""
 "This will reset pipeline configures as default. All your changes are lost."
 msgstr "파이프라인 설정을 기본값으로 초기화합니다. 모든 변경점들이 없어집니다."
 
-#: data/ui/preferencePipeline.ui:49
-#: data/ui/preferencePipelineConfigureDialog.ui:59
+#: data/ui/preferencePipeline.ui:23
+#: data/ui/preferencePipelineConfigureDialog.ui:58
 msgid "Yes"
 msgstr "예"
 
-#: data/ui/preferencePipeline.ui:50
-#: data/ui/preferencePipelineConfigureDialog.ui:60
+#: data/ui/preferencePipeline.ui:24
+#: data/ui/preferencePipelineConfigureDialog.ui:59
 msgid "No"
 msgstr "아니오"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:13
+#: data/ui/preferencePipelineButtons.ui:12
+#: data/ui/preferencePipelineButtons46.ui:26
+msgid "Add Pipeline Configure"
+msgstr "파이프라인 설정 추가"
+
+#: data/ui/preferencePipelineButtons.ui:20
+#: data/ui/preferencePipelineButtons46.ui:44
+msgid "Reset Pipeline Configures to Default"
+msgstr "기본값으로 파이프라인 설정을 초기화"
+
+#: data/ui/preferencePipelineConfigureDialog.ui:12
 msgid "Configure Name"
 msgstr "설정 이름"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:18
+#: data/ui/preferencePipelineConfigureDialog.ui:17
 msgid "Pipeline Description to prepare video, before encoding."
 msgstr "인코딩 전에, 비디오를 준비하는 파이프라인 설명입니다."
 
-#: data/ui/preferencePipelineConfigureDialog.ui:19
+#: data/ui/preferencePipelineConfigureDialog.ui:18
 msgid "Video Preparation Pipeline"
 msgstr "비디오 준비 파이프라인"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:24
+#: data/ui/preferencePipelineConfigureDialog.ui:23
 msgid "Pipeline Description to resize and prepare video, before encoding."
 msgstr "인코딩 전에, 비디오를 크기 조절하고 준비하는 파이프라인 설명입니다."
 
-#: data/ui/preferencePipelineConfigureDialog.ui:25
+#: data/ui/preferencePipelineConfigureDialog.ui:24
 msgid "Video Preparation Pipeline with Resize"
 msgstr "크기 조절 비디오 준비 파이프라인"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:30
+#: data/ui/preferencePipelineConfigureDialog.ui:29
 msgid ""
 "Pipeline Description to encode video, before mux.\n"
 "Usually put encoder with options."
@@ -158,11 +174,11 @@ msgstr ""
 "Mux 전에, 비디오를 인코딩 하는 파이프라인 설명입니다.\n"
 "옵션과 함께 인코더를 기재합니다."
 
-#: data/ui/preferencePipelineConfigureDialog.ui:32
+#: data/ui/preferencePipelineConfigureDialog.ui:31
 msgid "Video Encode Pipeline"
 msgstr "비디오 인코딩 파이프라인"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:37
+#: data/ui/preferencePipelineConfigureDialog.ui:36
 msgid ""
 "Pipeline Description to encode audio, before mux.\n"
 "Usually put encoder with options."
@@ -170,11 +186,11 @@ msgstr ""
 "Mux 전에, 오디오를 인코딩 하는 파이프라인 설명입니다.\n"
 "옵션과 함께 인코더를 기재합니다."
 
-#: data/ui/preferencePipelineConfigureDialog.ui:39
+#: data/ui/preferencePipelineConfigureDialog.ui:38
 msgid "Audio Encode Pipeline"
 msgstr "오디오 인코딩 파이프라인"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:44
+#: data/ui/preferencePipelineConfigureDialog.ui:43
 msgid ""
 "Pipeline Description to mux audio and video.\n"
 "Usually put muxer with options."
@@ -182,10 +198,10 @@ msgstr ""
 "오디오와 비디오를 Mux 하기 위한 파이프라인 설명입니다.\n"
 "옵션과 함께 Muxer를 기재합니다."
 
-#: data/ui/preferencePipelineConfigureDialog.ui:46
+#: data/ui/preferencePipelineConfigureDialog.ui:45
 msgid "Muxer Pipeline"
 msgstr "Muxer 파이프라인"
 
-#: data/ui/preferencePipelineConfigureDialog.ui:51
+#: data/ui/preferencePipelineConfigureDialog.ui:50
 msgid "File Extension"
 msgstr "파일 확장자"
