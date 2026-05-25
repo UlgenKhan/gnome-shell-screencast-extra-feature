@@ -310,10 +310,9 @@ export class PartAudio extends PartBase.PartUI {
             this.desktopAudioButton.reactive = (sink !== null);
 
             if (sink) {
-                let sinkPort = sink.get_port();
                 this.desktopAudioTooltip.text =
-                    gettext("Record Desktop Audio\n%s: %s")
-                        .format (sinkPort.human_port, sink.description);
+                    gettext("Record Desktop Audio\n%s")
+                        .format (sink.description);
             } else {
                 this.desktopAudioTooltip.text =
                     gettext("Cannot record Desktop Audio.\nNo audio device.");
@@ -334,10 +333,9 @@ export class PartAudio extends PartBase.PartUI {
             this.micAudioButton.reactive = (src !== null);
 
             if (src) {
-                let srcPort = src.get_port();
                 this.micAudioTooltip.text =
-                    gettext("Record Mic Audio\n%s: %s")
-                        .format(srcPort.human_port, src.description);
+                    gettext("Record Mic Audio\n%s")
+                        .format(src.description);
             } else {
                 this.desktopAudioTooltip.text =
                     gettext("Cannot record Mic Audio.\nNo audio device.");
