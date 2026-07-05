@@ -17,7 +17,7 @@ This is to aid simple use-cases, like simply recording some screen to share.
 ./build.sh
 
 # Install 
-gnome-extensions install screencast.extra.feature@wissle.me-shell-extension.zip
+gnome-extensions install screencast.extra.feature@wissle.me.shell-extension.zip
 ```
 
 ## UI
